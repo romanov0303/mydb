@@ -24,11 +24,14 @@
 
        echo "<tr>";
            echo " <td>".$object->name_harak." </td>";
-           echo "<td>".$object->idHarak." <input type='text' name='Value' /><input type = 'hidden' value='$object->idHarak'  name='idHarak'><input type = 'hidden' value='$idModel'  name='m_select'><input type = 'hidden' value='$object->name_harak'  name='name_harak'></td>";
+           echo "<td>".$object->idHarak." 
+		   <input type='text' name='Value_$object->idHarak' />
+		   <input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak'></td>";
       
         echo "</tr>";
 	   }
-       echo "<input type='submit'>";
+	   
+       echo "<input type = 'hidden' value='$idModel'  name='m_select'><input type='submit'>";
 
        ?>
 
