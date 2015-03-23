@@ -27,6 +27,7 @@
            echo "<td>".$object->idHarak." 
 		   <input type='text' name='Value_$object->idHarak' />
 		   <input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak'></td>";
+
       
         echo "</tr>";
 	   }
