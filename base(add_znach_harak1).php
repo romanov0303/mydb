@@ -22,8 +22,8 @@ mysql_select_db("mydb");
 	  $Value=$_POST["Value_$object->idHarak"]; 
            
 		  $idHarak=$_POST["idHarak_$object->idHarak"];
-	   echo "$Value";
-	   echo "$idHarak";
+	  // echo "$Value";
+	   //echo "$idHarak";
 	     $sql1 ="SELECT Model_idModel,Harak_idHarak FROM znach_harak WHERE Harak_idHarak='$idHarak' and Model_idModel='$m_select' ";
 		// echo "SELECT Model_idModel,Harak_idHarak FROM znach_harak WHERE Harak_idHarak='$idHarak', Model_idModel='$m_select'";
 		 $sql2="UPDATE `znach_harak` SET `Harak_idHarak`=[$idHarak],`Model_idModel`=[$m_select],`Znachint`=[$Value]";
