@@ -1,56 +1,75 @@
-<?PHP
-print_r($_POST); 
+<html>
+	<head>
+	<title>Форма(model)</title>
+	</head>
+	<body>
 
-$m_select=$_POST['m_select'];
+       
+        <form method="post" action="base(add_znach_harak1).php">
+		<?php
+        $idModel=$_POST['m_select'];
+        echo "$idModel";
 
+       mysql_connect("localhost", "admin", "123");
 
-mysql_connect("localhost","admin","123");
-mysql_select_db("mydb");
-
-
- 
- $sql = "SELECT idHarak,name_harak,type_harak FROM harak";
-
+       mysql_select_db("mydb");
+    
+     $sql = "SELECT type_harak, idHarak, name_harak, 
+	 (select Znachint from znach_harak where znach_harak.Harak_idHarak=harak.idHarak and Model_idModel=$idModel) as Znachint, 
+	 (select Znachstr from znach_harak where znach_harak.Harak_idHarak=harak.idHarak and Model_idModel=$idModel) as Znachstr,
+     (select Znachdouble from znach_harak where znach_harak.Harak_idHarak=harak.idHarak and Model_idModel=$idModel) as Znachdouble	 FROM harak";
+     
        $result_select = mysql_query($sql);
+	   
+	   echo $sql."<br>";
+	   
 
 
-
+echo "<table>";
+ 
        while($object = mysql_fetch_object($result_select)){
 
        echo "<tr>";
-	   //здесь условие нужно как в пред. файле
-	  $Value=$_POST["Value_$object->idHarak"]; 
-           $m_select1=$_POST["Value_$object->idHarak"];
-		  $idHarak=$_POST["idHarak_$object->idHarak"];
-		  //$m_select1=$_POST[m_select1];
-		   //$idHarak1=$_POST["idHarak1_$object->idHarak"];
-	   //echo $Value1;
-	   //echo" . ";
-	   //echo "$idHarak";
-	     $sql1 ="SELECT Model_idModel,Harak_idHarak,type_harak FROM znach_harak INNER JOIN harak on znach_harak.Harak_idHarak=harak.idHarak WHERE Harak_idHarak='$idHarak' and Model_idModel='$m_select' ";
-		//echo "SELECT Model_idModel,Harak_idHarak FROM znach_harak WHERE Harak_idHarak='$idHarak', Model_idModel='$m_select'";
-		 $sql2="UPDATE znach_harak SET Harak_idHarak='$idHarak',Model_idModel='$m_select',Znachint='$Value',Znachstr='$Value',Znachdouble='$Value',Spisok_znach_idSpisok_znach='$Value' WHERE Harak_idHarak='$idHarak' and Model_idModel='$m_select'";
-		// echo "UPDATE znach_harak SET Harak_idHarak='$idHarak',Model_idModel='$m_select',Znachint='$Value',Znachstr='$Value',Znachdouble='$Value',Spisok_znach_idSpisok_znach='$Value' WHERE Harak_idHarak='$idHarak' and Model_idModel='$m_select'";
-		 $sql3="INSERT INTO znach_harak (Harak_idHarak,Model_idModel,Znachint,Znachstr,Znachdouble,Spisok_znach_idSpisok_znach) VALUES('$idHarak','$m_select','$Value','$Value','$Value','$Value')";
-		 echo "INSERT INTO znach_harak (Harak_idHarak,Model_idModel,Znachint,Znachstr,Znachdouble,Spisok_znach_idSpisok_znach) VALUES('$idHarak','$m_select','$Value','$Value','$Value','$Value')<br/>";
-          //$sql4="UPDATE znach_harak SET Harak_idHarak='$idHarak',Model_idModel='$m_select',Znachstr='$Value1'  WHERE Harak_idHarak='$idHarak' and Model_idModel='$m_select'";
-		 // echo $sql4;
-		 // $sql5="INSERT INTO `znach_harak`(`Harak_idHarak`, `Model_idModel`, `Znachstr` VALUES ('$idHarak','$m_select','$Value1')";
-		  //echo $sql5;
-		  $result_select1 = mysql_query($sql1) ;
-            
-             $num_rows=mysql_num_rows($result_select1);  
-			 IF ($num_rows>0) {
-			 $result2=mysql_query($sql2);
-             //echo $result2;			 
-			 }
-		     IF ($num_rows==0) {
-			 $result1=mysql_query($sql3); }
-			// $result=mysql_query($sql1);
-       echo "</tr>";
+           echo " <td>".$object->name_harak." </td>";
+		   
+           if ($object->type_harak == "INT")
+		   echo "<td>".$object->idHarak." 
+		   <input type='text' value='$object->Znachint' name='Value_$object->idHarak' />
+		   <input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak'></td>";
+		  
+            if ($object->type_harak == "STR")				
+			   echo "<td>".$object->idHarak." 
+		    <input type='text' value='$object->Znachstr' name='Value_$object->idHarak' />
+		    <input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak'></td>";
+			
+			 if ($object->type_harak == "DBL")				
+			   echo "<td>".$object->idHarak." 
+		    <input type='text' value='$object->Znachdouble' name='Value_$object->idHarak' />
+	   <input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak'></td>";
+			
+		 
+		  
 	   
-	   }
-	   
+        echo "</tr>";
+	   if ($object->type_harak == "LST"){
+				
+		   $sql1="SELECT idSpisok_znach,Harak_idHarak,Znach FROM spisok_znach WHERE Harak_idHarak=$object->idHarak";
+		     $result1=mysql_query($sql1);
+	   echo "<select name= 'Value_$object->idHarak'>";
+	           
+			   while($row = mysql_fetch_object($result1)){
+				  echo "<option value='$row->idSpisok_znach'> $row->Znach</option>"; 
+			   }
+			  
+	   echo "</select>";
+      echo "<input type = 'hidden' value='$object->idHarak'  name='idHarak_$object->idHarak' />";	   }	 } 
+	echo "</table>";   
+       echo "<input type = 'hidden' value='$idModel'  name='m_select'><input type='submit'>";
 
+       ?>
 
-?>
+	
+ 
+
+	</body>
+	</html>
